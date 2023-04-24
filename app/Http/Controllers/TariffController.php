@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tariff;
-use App\Models\ServicePlace;
+use App\Models\Dependence;
 use Encrypt;
 use Illuminate\Http\Request;
 
@@ -12,11 +12,11 @@ class TariffController extends Controller
     public function index()
     {
         $tariffs = Tariff::all();
-
+        
         foreach ($tariffs as $tariff) {
-            $tariff->place_name = $tariff->places->place_name;
+            $tariff->dependence_name = $tariff->dependences->dependence_name;
         }
-        $tariffs->makeHidden(["places"]);
+        $tariffs->makeHidden(["dependences"]);
 
         $tariffs = Encrypt::encryptObject($tariffs, "id");
 
@@ -28,9 +28,9 @@ class TariffController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->except("place_name");
-        $places = ServicePlace::where("place_name", $request->place_name)->first();
-        $data["service_place_id"] = $places->id;
+        $data = $request->except("dependence_name");
+        $dependences = Dependence::where("dependence_name", $request->dependence_name)->first();
+        $data["service_dependence_id"] = $dependences->id;
         Tariff::insert($data);
 
         return response()->json([
@@ -40,10 +40,10 @@ class TariffController extends Controller
 
     public function update(Request $request)
     {
-        $places = ServicePlace::where("place_name", $request->place_name)->first();
-        $data = Encrypt::decryptArray($request->except(["place_name"]), "id");
+        $dependences = Dependence::where("dependence_name", $request->dependence_name)->first();
+        $data = Encrypt::decryptArray($request->except(["dependence_name"]), "id");
 
-        $data["service_place_id"] = $places->id;
+        $data["dependence_id"] = $dependences->id;
 
         tariff::where("id", $data)->update($data);
         return response()->json([
@@ -62,11 +62,11 @@ class TariffController extends Controller
         ]);
     }
 
-    public function byPlaceName(Request $request)
+    public function byDependenceName(Request $request)
     {
         $tariffs = Tariff::select("*")
-        ->join("service_places", "tariffs.service_place_id", "=", "service_places.id")
-        ->where("service_places.place_name", $request->service_places)
+        ->join("dependences", "tariffs.dependence_id", "=", "dependences.id")
+        ->where("dependences.dependence_name", $request->dependences)
         ->get();
 
         return response()->json([

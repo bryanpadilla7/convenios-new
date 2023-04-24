@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class Agreement extends Model
+class Instrument extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'agreements';
+    protected $table = 'instruments';
 
     public $incrementing = true;
 
@@ -18,10 +18,11 @@ class Agreement extends Model
 
     protected $fillable = [
         'id',
-        'agreement_name',
+        'instrument_name',
         'description',
-        'type_agreement_id',
-        'entity_id',
+        'type_instrument_id',
+        'sector_id',
+        'entity',
     ];
 
     public $hidden = [
@@ -32,14 +33,14 @@ class Agreement extends Model
 
     public $timestamps = true;
 
-    public function entity()
+    public function sector()
     {
-        return $this->belongsTo(Entity::class, 'entity_id', 'id');
+        return $this->belongsTo(Sector::class, 'sector_id', 'id');
     }
 
-    public function typeAgreement()
+    public function typeInstrument()
     {
-        return $this->belongsTo(TypeAgreement::class, 'type_agreement_id', 'id');
+        return $this->belongsTo(TypeInstrument::class, 'type_instrument_id', 'id');
     }
 
     public function exonerations()

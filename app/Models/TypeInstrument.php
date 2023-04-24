@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class TypeAgreement extends Model
+class TypeInstrument extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'type_agreements';
+    protected $table = 'type_instruments';
 
     public $incrementing = true;
 
@@ -18,7 +18,7 @@ class TypeAgreement extends Model
 
     protected $fillable = [
         'id',
-        'type_agreement_name',
+        'type_instrument_name',
     ];
 
     public $hidden = [
@@ -29,8 +29,8 @@ class TypeAgreement extends Model
 
     public $timestamps = false;
 
-    public function agreement()
+    public function instrument()
     {
-        return $this->hasMany(Agreement::class);
+        return $this->hasMany(Instrument::class);
     }
 }

@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TypeAgreement;
-use Encrypt;
+use App\Models\Sector;
 use Illuminate\Http\Request;
+use Encrypt;
 
-class TypeAgreementController extends Controller
+class SectorController extends Controller
 {
     public function index()
     {
-        $types = TypeAgreement::all();
-        $types = Encrypt::encryptObject($types, 'id');
+        $sectors = Sector::all();
+        $sectors = Encrypt::encryptObject($sectors, 'id');
 
         return response()->json([
             "status"=>"success",
             "message"=>"Registros obtenidos correctamente.",
-            'types'=>$types
+            'sectors'=>$sectors
         ]);
     }
 
     public function store(Request $request)
     {
-        TypeAgreement::insert($request->all());
+        Sector::insert($request->all());
 
         return response()->json([
             "status"=>"success",
@@ -30,11 +30,16 @@ class TypeAgreementController extends Controller
         ]);
     }
 
+    public function show(Sector $sector)
+    {
+        //
+    }
+
     public function update(Request $request)
     {
         $data = Encrypt::decryptArray($request->all(), 'id');
 
-        TypeAgreement::where('id', $data)->update($data);
+        Sector::where('id', $data)->update($data);
         return response()->json([
             "status"=>"success",
             "message"=>"Registro modificado correctamente."
@@ -45,7 +50,7 @@ class TypeAgreementController extends Controller
     {
         $id = Encrypt::decryptValue($id);
 
-        TypeAgreement::where('id', $id)->delete();
+        Sector::where('id', $id)->delete();
         return response()->json([
             "status"=>"success",
             "message"=>"Registro eliminado correctamente."

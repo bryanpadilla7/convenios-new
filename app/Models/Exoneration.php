@@ -19,16 +19,21 @@ class Exoneration extends Model
     protected $fillable = [
         'id',
         'exonerated_description',
-        'agreement_id',
-        'dependence_id',
+        'instrument_id',
         'hour',
         'people',
         'date',
-        'exonerated_amount',
+        'amount_hour',
+        'amount_people',
         'service_place_id',
         'tariff_id',
-        'not_charged',
-        'total_amount',
+        'tariff_hour',
+        'tariff_people',
+        'not_charged_hour',
+        'not_charged_people',
+        'concept',
+        'worth',
+        'concept_amount',
     ];
 
     public $hidden = [
@@ -39,19 +44,14 @@ class Exoneration extends Model
 
     public $timestamps = true;
 
-    public function agreement()
+    public function instrument()
     {
-        return $this->belongsTo(Agreement::class, 'agreement_id', 'id');
-    }
-
-    public function dependence()
-    {
-        return $this->belongsTo(ServicePlace::class, 'dependence_id', 'id');
+        return $this->belongsTo(Instrument::class, 'instrument_id', 'id');
     }
 
     public function tariff()
     {
-        return $this->belongsTo(Tariff::class, "tariff_id", "id");
+        return $this->belongsTo(Tariff::class, "tariff_id_hour", "id");
     }
 
     public function place()

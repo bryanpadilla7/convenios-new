@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             ServicePlaceSeeder::class,
             TariffSeeder::class,
             EntitySeeder::class,
-            TypeAgreementSeeder::class,
+            TypeInstrumentSeeder::class,
+            SectorSeeder::class,
         ]);
     }
 }

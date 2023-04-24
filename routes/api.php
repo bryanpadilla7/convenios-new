@@ -3,14 +3,15 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\MunicipalityController;
-use App\Http\Controllers\AgreementController;
-use App\Http\Controllers\TypeAgreementController;
+use App\Http\Controllers\InstrumentController;
+use App\Http\Controllers\TypeInstrumentController;
 use App\Http\Controllers\EntityController;
 use App\Http\Controllers\NationalDirectionController;
 use App\Http\Controllers\TariffController;
 use App\Http\Controllers\ServicePlaceController;
 use App\Http\Controllers\DependenceController;
 use App\Http\Controllers\ExonerationController;
+use App\Http\Controllers\SectorController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -57,13 +58,14 @@ Route::group(
         Route::resource('/department', DepartmentController::class);
         Route::resource('/municipality', MunicipalityController::class);
         Route::resource('/user', UserController::class);
-        Route::resource('/agreement', AgreementController::class);
+        Route::resource('/instrument', InstrumentController::class);
         Route::resource('/exoneration', ExonerationController::class);
         Route::resource('/entity', EntityController::class);
         Route::resource('/direction', NationalDirectionController::class);
         Route::resource('/place', ServicePlaceController::class);
         Route::resource('/tariff', TariffController::class);
-        Route::resource('/type', TypeAgreementController::class);
+        Route::resource('/type', TypeInstrumentController::class);
+        Route::resource('/sector', SectorController::class);
         Route::resource('/dependence', DependenceController::class);
         Route::resource('/role', RoleController::class);
     }
