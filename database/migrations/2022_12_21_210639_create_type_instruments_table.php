@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tariffs', function (Blueprint $table) {
+        Schema::create('type_instruments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('service_place_id')->constrained('service_places');
-            $table->string('type_charge');
-            $table->decimal('amount', 8, 2);
+            $table->string('type_instrument_name');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tariffs');
+        Schema::dropIfExists('type_instruments');
     }
 };

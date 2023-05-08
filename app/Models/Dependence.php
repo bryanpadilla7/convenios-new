@@ -39,4 +39,14 @@ class Dependence extends Model
     {
         return $this->belongsTo(NationalDirection::class, 'national_direction_id', 'id');
     }
+
+    public function userDependence()
+    {
+        return $this->hasMany(UserDependence::class);
+    }
+
+    public function instumentDependence()
+    {
+        return $this->hasMany(InstrumentDependence::class);
+    }
 }

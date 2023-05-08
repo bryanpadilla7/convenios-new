@@ -62,4 +62,10 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     {
         return [];
     }
+
+    public function userDependence()
+    {
+        return $this->hasMany(UserDependence::class);
+    }
+
 }

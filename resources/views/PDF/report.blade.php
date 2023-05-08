@@ -13,17 +13,27 @@
         border-spacing: 0px;
     }
 
-    td,
-    th {
-        border: 1px solid #dddddd;
+    td {
         text-align: left;
-        padding: 8px;
+        padding: 12px;
     }
 
-    tr:nth-child(even) {
-        background-color: #dddddd;
-        border: 1px solid white;
+    h3 {
+        line-height: 200%;
     }
+
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    th {
+        background: #323e48;
+        color: white;
+        height: 3%;
+        text-align: center;
+        font-weight: bold;
+    }
+
 
 </style>
 
@@ -41,23 +51,27 @@
     <table>
         <tbody>
             <tr>
-                <th colspan="2">Información del convenio</th>
+                <th colspan="2">Información del instrumento</th>
             </tr>
             <tr>
-                <td>Nombre del convenio:</td>
-                <td>{{ $d->agreement_name }}</td>
+                <td>Nombre del instrumento:</td>
+                <td>{{ $d->instrument_name }}</td>
             </tr>
             <tr>
                 <td>Tipo de convenio:</td>
-                <td>{{ $d->type_agreement_name }}</td>
+                <td>{{ $d->type_instrument_name }}</td>
             </tr>
             <tr>
                 <td>Entidad:</td>
-                <td>{{ $d->entity_name }}</td>
+                <td>{{ $d->entity }}</td>
             </tr>
             <tr>
                 <td>Descripción:</td>
                 <td>{{ $d->description }}</td>
+            </tr>
+            <tr>
+                <td>Sector:</td>
+                <td>{{ $d->sector_name }}</td>
             </tr>
             
         </tbody>
@@ -66,7 +80,7 @@
     <table>
         <tbody> 
             <tr>
-                <th colspan="7">Exoneraciones</th>
+                <th colspan="8">Exoneraciones</th>
             </tr>
             <tr>
                 <td><strong>Espacio</strong></td>
@@ -74,7 +88,8 @@
                 <td><strong>Horas</strong></td>
                 <td><strong>Tarifa</strong></td>
                 <td><strong>Asistentes</strong></td>
-                <td><strong>Monto</strong></td>
+                <td><strong>Monto por hora</strong></td>
+                <td><strong>Monto por persona</strong></td>
                 <td><strong>Descripción</strong></td>
             </tr>
 
@@ -85,14 +100,18 @@
                     <td>{{ $exo->hour }}</td>
                     <td>{{ $exo->charge }}</td>
                     <td>{{ $exo->people }}</td>
-                    <td>{{ $exo->exonerated_amount }}</td>
+                    <td>{{ $exo->amount_hour }}</td>
+                    <td>{{ $exo->amount_people }}</td>
                     <td>{{ $exo->exonerated_description }}</td>
                 </tr>    
             @endforeach
         </tbody>
     </table>
     <br><br>
-    <h4>Monto Total: {{ $d->totalAmount }}</h4>
+    <h4>Monto Total por Hora: ${{ $d->totalAmountHour }}</h4>
+    <h4>Monto Total por Persona: ${{ $d->totalAmountPeople }}</h4>
+    <br>
+    <h4>Total de contribución: ${{ $d->totalContributed }}</h4>
     @endforeach
 
     <div id="footer">

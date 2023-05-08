@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Entity extends Model
+class InstrumentDependence extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'entities';
+    protected $table = 'instrument_dependences';
 
     public $incrementing = true;
 
@@ -18,7 +18,8 @@ class Entity extends Model
 
     protected $fillable = [
         'id',
-        'entity_name',
+        'instrument_id',
+        'dependence_id',
     ];
 
     public $hidden = [
@@ -27,10 +28,15 @@ class Entity extends Model
         'deleted_at',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function instrument()
     {
-        return $this->hasMany(Instrument::class);
+        return $this->belongsTo(Instrument::class, 'instrument_id', 'id');
+    }
+
+    public function dependence()
+    {
+        return $this->belongsTo(Dependence::class, 'dependence_id', 'id');
     }
 }

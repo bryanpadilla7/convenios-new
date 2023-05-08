@@ -62,18 +62,18 @@
               <v-card-text>
                 <v-container>
                   <!-- Form -->
-                  <!-- Service Place Name -->
-                  <v-row v-if="places.length > 0">
+                  <!-- Dependence Name -->
+                  <v-row v-if="dependences.length > 0">
                     <v-col cols="12" sm="6" md="6">
                       <base-select-search
-                        label="Espacio de Servicio"
-                        v-model.trim="$v.editedItem.place_name.$model"
-                        :items="places"
-                        item="place_name"
-                        :validation="$v.editedItem.place_name"
+                        label="Dependencia"
+                        v-model.trim="$v.editedItem.dependence_name.$model"
+                        :items="dependences"
+                        item="dependence_name"
+                        :validation="$v.editedItem.dependence_name"
                       />
                     </v-col>
-                    <!-- Service Place Name -->
+                    <!-- Dependence Name -->
                     <!-- Amount -->
                     <v-col cols="12" sm="12" md="6">
                       <base-input
@@ -176,7 +176,7 @@
 </template>
 
 <script>
-import placeApi from "../apis/placeApi";
+import dependenceApi from "../apis/dependenceApi";
 import tariffApi from "../apis/tariffApi";
 import lib from "../libs/function";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
@@ -187,7 +187,7 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
-      { text: "ESPACIO DE SERVICIO", value: "place_name" },
+      { text: "DEPENDENCIA", value: "dependence_name" },
       { text: "TIPO DE COBRO", value: "type_charge" },
       { text: "MONTO ($)", value: "amount" },
       { text: "ACCIONES", value: "actions", sortable: false },
@@ -196,26 +196,26 @@ export default {
     recordsFiltered: [],
     editedIndex: -1,
     editedItem: {
-      place_name: "",
+      dependence_name: "",
       type_charge: "",
       amount: "",
     },
     defaultItem: {
-      place_name: "",
+      dependence_name: "",
       type_charge: "",
       amount: "",
     },
     textAlert: "",
     alertEvent: "success",
     showAlert: false,
-    places: [],
+    dependences: [],
     redirectSessionFinished: false,
   }),
 
   // Validations
   validations: {
     editedItem: {
-      place_name: {
+      dependence_name: {
         required,
       },
       type_charge: {
@@ -255,7 +255,7 @@ export default {
       this.records = [];
       this.recordsFiltered = [];
 
-      let requests = [tariffApi.get(), placeApi.get()];
+      let requests = [tariffApi.get(), dependenceApi.get()];
       let responses = await Promise.all(requests).catch((error) => {
         this.updateAlert(true, "No fue posible obtener los registros.", "fail");
         this.redirectSessionFinished = lib.verifySessionFinished(
@@ -265,7 +265,7 @@ export default {
       });
 
       this.records = responses[0].data.tariffs;
-      this.places = responses[1].data.places;
+      this.dependences = responses[1].data.dependences;
 
       this.recordsFiltered = this.records;
     },
@@ -274,8 +274,8 @@ export default {
       this.dialog = true;
       this.editedIndex = this.recordsFiltered.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.$v.editedItem.place_name.$model =
-        this.editedItem.place_name;
+      this.$v.editedItem.dependence_name.$model =
+        this.editedItem.dependence_name;
     },
 
     deleteItem(item) {
@@ -337,7 +337,7 @@ export default {
 
     async save() {
       this.$v.$touch();
-      if (this.$v.$invalid || this.editedItem.place_name == "") {
+      if (this.$v.$invalid || this.editedItem.dependence_name == "") {
         this.updateAlert(true, "Campos obligatorios.", "fail");
         return;
       }
@@ -387,8 +387,8 @@ export default {
       if (this.search != "") {
         this.records.forEach((record) => {
           let searchConcat = "";
-          for (let i = 0; i < record.place_name.length; i++) {
-            searchConcat += record.place_name[i].toUpperCase();
+          for (let i = 0; i < record.dependence_name.length; i++) {
+            searchConcat += record.dependence_name[i].toUpperCase();
             if (
               searchConcat === this.search.toUpperCase() &&
               !this.recordsFiltered.some((rec) => rec == record)

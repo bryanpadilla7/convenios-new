@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use PDF;
 use DB;
 use App\Models\Exoneration;
-use App\Models\Agreement;
+use App\Models\Instrument;
 
 class PDFController extends Controller
 {
@@ -22,12 +22,12 @@ class PDFController extends Controller
         $date = $request->all();
 
         if($request->dateOne == null || $request->dateOne == ''){
-            $agreement_id = Agreement::where("agreement_name", $request->agreement_name)->first()->id;
+            $instrument_id = Instrument::where("instrument_name", $request->instrument_name)->first()->id;
 
-            $data = Agreement::select('agreements.*', 'entities.entity_name', 'type_agreements.type_agreement_name')
-                                ->join('entities', 'agreements.entity_id', '=', 'entities.id')
-                                ->join('type_agreements', 'agreements.type_agreement_id', '=', 'type_agreements.id')
-                                ->where('agreements.id', $agreement_id)
+            $data = Instrument::select('instruments.*', 'type_instruments.type_instrument_name', 'sectors.sector_name')
+                                ->join('type_instruments', 'instruments.type_instrument_id', '=', 'type_instruments.id')
+                                ->join('sectors', 'instruments.sector_id', '=', 'sectors.id')
+                                ->where('instruments.id', $instrument_id)
                                 ->get();
 
            /*  $data = Exoneration::selectRaw('SUM(exonerations.exonerated_amount) AS Total')
@@ -36,29 +36,36 @@ class PDFController extends Controller
 
             foreach($data as $item){
                 $item->exonerations = Exoneration::select('exonerations.*', 'service_places.place_name',
-                        DB::raw('IFNULL(tariffs.amount, exonerations.not_charged) AS charge'))
+                        DB::raw('IFNULL(tariffs.amount, exonerations.not_charged_hour) AS charge_hour'), DB::raw('IFNULL(tariffs.amount, exonerations.not_charged_people) AS charge_people'))
                 ->leftJoin('service_places', 'exonerations.service_place_id', '=', 'service_places.id')
                 ->leftJoin('tariffs', 'exonerations.tariff_id', '=', 'tariffs.id') 
-                ->where('exonerations.agreement_id', $agreement_id)
+                ->where('exonerations.instrument_id', $instrument_id)
                 ->get();
 
-                $item->totalAmount = Exoneration::selectRaw('SUM(exonerations.exonerated_amount) AS Total')
-                    ->where('exonerations.agreement_id', $agreement_id)
-                    ->value('Total');
+                $item->totalAmountHour = Exoneration::selectRaw('SUM(exonerations.amount_hour) AS Total_hour')
+                    ->where('exonerations.instrument_id', $instrument_id)
+                    ->value('Total_hour');
+                
+                $item->totalAmountPeople = Exoneration::selectRaw('SUM(exonerations.amount_people) AS Total_people')
+                    ->where('exonerations.instrument_id', $instrument_id)
+                    ->value('Total_people');
+                
+                $item->totalContributed = $item->totalAmountHour + $item->totalAmountPeople;
             } 
 
         }else{
-            $agreement_id = Agreement::where("agreement_name", $request->agreement_name)->first()->id;
+            $instrument_id = Instrument::where("instrument_name", $request->instrument_name)->first()->id;
 
-            $data = Agreement::select('agreements.*', 'entities.entity_name', 'type_agreements.type_agreement_name')
-                                ->join('entities', 'agreements.entity_id', '=', 'entities.id')
-                                ->join('type_agreements', 'agreements.type_agreement_id', '=', 'type_agreements.id')
-                                ->where('agreements.id', $agreement_id)
+            $data = Instrument::select('instruments.*', 'entities.entity_name', 'type_instruments.type_instrument_name')
+                                ->join('entities', 'instruments.entity_id', '=', 'entities.id')
+                                ->join('type_instruments', 'instruments.type_instrument_id', '=', 'type_instruments.id')
+                                ->join('sectors', 'instruments.sector_id', '=', 'sectors.id')
+                                ->where('instruments.id', $instrument_id)
                                 ->get();
 
             foreach($data as $item){
                 $item->exonerations = Exoneration::select('exonerations.*', 'service_places.place_name',
-                        DB::raw('IFNULL(tariffs.amount, exonerations.not_charged) AS charge'))
+                        DB::raw('IFNULL(tariffs.amount, exonerations.not_charged_hour) AS charge_hour'))
                 ->leftJoin('service_places', 'exonerations.service_place_id', '=', 'service_places.id')
                 ->leftJoin('tariffs', 'exonerations.tariff_id', '=', 'tariffs.id')
                 ->whereRaw("(exonerations.date >= ? AND exonerations.date <= ?)", [$date['dateOne'], $date['dateTwo']])

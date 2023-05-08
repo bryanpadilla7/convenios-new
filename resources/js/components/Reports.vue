@@ -9,18 +9,31 @@
             <v-divider></v-divider>
             <v-container>
                 <v-row class="mx-auto">
-                    <!-- Agreement -->
+                    <!-- Instrument -->
                     <v-col cols="12" sm="12" md="12">
                         <base-select-search
-                            label="Convenio"
-                            v-model.trim="$v.parameters.agreement_name.$model"
-                            :items="agreements"
-                            item="agreement_name"
-                            :validation="$v.parameters.agreement_name"
+                            label="Instrumento"
+                            v-model.trim="$v.parameters.instrument_name.$model"
+                            :items="instruments"
+                            item="instrument_name"
+                            :validation="$v.parameters.instrument_name"
                         />
                     </v-col>
-                    <!-- Agreement -->
+                    <!-- Instrument -->
                 </v-row>
+                <v-row class="mx-auto">
+                        <!-- Instrument -->
+                        <v-col cols="12" sm="12" md="12">
+                            <base-select-search
+                                label="Sector"
+                                v-model.trim="$v.parameters.sector_name.$model"
+                                :items="sectors"
+                                item="sector_name"
+                                :validation="$v.parameters.sector_name"
+                            />
+                        </v-col>
+                        <!-- Instrument -->
+                    </v-row>
                 <v-row class="mx-auto">
                     <!-- Date -->
                         <v-col cols="12" sm="12" md="6" v-show="hidden"> 
@@ -64,11 +77,12 @@
 </template>
 
 <script>
-import agreementApi from "../apis/agreementApi";
+import instrumentApi from "../apis/instrumentApi";
 import BaseInput from "./base-components/BaseInput.vue";
 import lib from "../libs/function";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 import axios from "axios";
+import sectorApi from '../apis/sectorApi';
 
 export default {
     components: { BaseInput },
@@ -77,14 +91,16 @@ export default {
         recordsFiltered: [],
         editedIndex: -1,
         parameters: {
-            agreement_name: "",
+            instrument_name: "",
+            sector_name: "",
             dateOne: "",
             dateTwo: "",
         },
         textAlert: "",
         alertEvent: "success",
         showAlert: false,
-        agreements: [],
+        instruments: [],
+        sectors: [],
         redirectSessionFinished: false,
         alertTimeOut: 0,
         hidden: false,
@@ -93,7 +109,10 @@ export default {
     //Validations
     validations: {
         parameters: {
-            agreement_name: {
+            instrument_name: {
+                required,
+            },
+            sector_name: {
                 required,
             },
             dateOne: {
@@ -114,7 +133,7 @@ export default {
             this.records = [];
             this.recordsFiltered = [];
 
-            let requests = [agreementApi.get()];
+            let requests = [instrumentApi.get(), sectorApi.get()];
             let responses = await Promise.all(requests).catch((error) => {
                 this.updateAlert(true, "No fue posible obtener los registros.", "fail");
                 this.redirectSessionFinished = lib.verifySessionFinished(
@@ -123,82 +142,15 @@ export default {
                 );
             });
 
-            this.agreements = responses[0].data.agreements;
+            this.instruments = responses[0].data.instruments;
+            this.sectors = responses[1].data.sectors;
             this.recordsFiltered = this.records;
         },
 
         async generateReport() {
             console.log(this.parameters);
             if(this.parameters){
-                window.open(`/pdf/reports?agreement_name=${this.parameters.agreement_name}&&dateOne=${this.parameters.dateOne}&&dateTwo=${this.parameters.dateTwo}`);
-                return;
-            }
-        },
-    },
-};
-</script>
-
-<script>
-import agreementApi from "../apis/agreementApi";
-import BaseInput from "./base-components/BaseInput.vue";
-import lib from "../libs/function";
-import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import axios from "axios";
-export default {
-    components: { BaseInput },
-    data: () => ({
-        records: [],
-        recordsFiltered: [],
-        editedIndex: -1,
-        parameters: {
-            agreement_name: "",
-            dateOne: "",
-            dateTwo: "",
-        },
-        textAlert: "",
-        alertEvent: "success",
-        showAlert: false,
-        agreements: [],
-        redirectSessionFinished: false,
-        alertTimeOut: 0,
-        hidden: false,
-    }),
-    //Validations
-    validations: {
-        parameters: {
-            agreement_name: {
-                required,
-            },
-            dateOne: {
-                minLength: minLength(1),
-            },
-            dateTwo: {
-                minLength: minLength(1),
-            },
-        },
-    },
-    mounted() {
-        this.initialize();
-    },
-    methods: {
-        async initialize() {
-            this.records = [];
-            this.recordsFiltered = [];
-            let requests = [agreementApi.get()];
-            let responses = await Promise.all(requests).catch((error) => {
-                this.updateAlert(true, "No fue posible obtener los registros.", "fail");
-                this.redirectSessionFinished = lib.verifySessionFinished(
-                    error.response.status,
-                    401
-                );
-            });
-            this.agreements = responses[0].data.agreements;
-            this.recordsFiltered = this.records;
-        },
-        async generateReport() {
-            console.log(this.parameters);
-            if(this.parameters){
-                window.open(`/pdf/reports?agreement_name=${this.parameters.agreement_name}&&dateOne=${this.parameters.dateOne}&&dateTwo=${this.parameters.dateTwo}`);
+                window.open(`/pdf/reports?instrument_name=${this.parameters.instrument_name}&&sector_name=${this.parameters.sector_name}&&dateOne=${this.parameters.dateOne}&&dateTwo=${this.parameters.dateTwo}`);
                 return;
             }
         },

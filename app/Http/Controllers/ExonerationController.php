@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ServicePlace;
 use App\Models\Exoneration;
-use App\Models\Agreement;
+use App\Models\Instrument;
 use App\Models\Dependence;
 use App\Models\Tariff;
 use Encrypt;
@@ -24,33 +24,44 @@ class ExonerationController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $agreement_id = Agreement::where("agreement_name", $request->agreement_name)->first()->id;
-        $dependence_id = Dependence::where("dependence_name", $request->dependence_name)->first()->id;
-        $place_id = ServicePlace::where("place_name", $request->place_name)->first()->id;
-
+    {   //dd($request);
+        $instrument_id = Instrument::where("instrument_name", $request->instrument_name)->first()->id;
+        
         $exonerations = $request->exonerations;
 
         foreach ($exonerations as $exoneration) {
-            $tariff_id = null;
-            $not_charged = null;
-            if ($exoneration["type_charge"] != null && $exoneration["type_charge"] != "") {
-                $tariff_id = Tariff::where("type_charge", $exoneration["type_charge"])->first()->id;
+            $tariff_id = "1";
+            $tariff_hour = null;
+            $tariff_people = null;
+            $not_charged_hour = null;
+            $not_charged_people = null;
+
+            if ($exoneration["tariff_hour"] != null && $exoneration["tariff_hour"] != "" && $exoneration["tariff_people"] != null && $exoneration["tariff_people"] != "") {
+                $tariff_hour = Tariff::where("type_charge", $exoneration["tariff_hour"])->first()->id;
+                $tariff_people = Tariff::where("type_charge", $exoneration["tariff_people"])->first()->id;
+                $tariff_id = Tariff::where("type_charge", $request->tariff_hour)->first()->id;
             } else {
-                $not_charged = $exoneration["not_charged"];
+                $not_charged_hour = $exoneration["not_charged_hour"];
+                $not_charged_people = $exoneration["not_charged_people"];
             }
 
             Exoneration::create([
                 'exonerated_description' => $exoneration["exonerated_description"],
-                'agreement_id' => $agreement_id,
-                'dependence_id' => $dependence_id,
+                'instrument_id' => $instrument_id,
+                'tariff_id' => $tariff_id,
                 'hour'=> $exoneration["hour"],
                 'people'=> $exoneration["people"],
                 'date'=> $exoneration["date"],
-                'exonerated_amount' => $exoneration["exonerated_amount"],
-                'service_place_id' => $place_id,
-                'tariff_id' => $tariff_id,
-                'not_charged' => $not_charged,
+                'amount_hour' => $exoneration["amount_hour"],
+                'amount_people' => $exoneration["amount_people"],
+                'service_place' => $exoneration["service_place"],
+                'tariff_hour' => $tariff_hour,
+                'tariff_people' => $tariff_people,
+                'not_charged_hour' => $not_charged_hour,
+                'not_charged_people' => $not_charged_people,
+                'concept' => $exoneration["concept"],
+                'worth' => $exoneration["worth"],
+                'concept_amount' => $exoneration["concept_amount"],
             ]);
     }
 
@@ -59,6 +70,8 @@ class ExonerationController extends Controller
         "message" => "Registros creados correctamente."
     ]);
     }
+
+    
 
     public function show($agreement_id)
     {

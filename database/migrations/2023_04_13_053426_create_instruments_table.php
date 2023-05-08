@@ -13,9 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('type_agreements', function (Blueprint $table) {
+        Schema::create('instruments', function (Blueprint $table) {
             $table->id();
-            $table->string('type_agreement_name');
+            $table->string('instrument_name');
+            $table->text('description');
+            $table->foreignId('type_instrument_id')->constrained('type_instruments');
+            $table->foreignId('sector_id')->constrained('sectors');
+            $table->foreignId('entity_id')->constrained('entities');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('type_agreements');
+        Schema::dropIfExists('instruments');
     }
 };

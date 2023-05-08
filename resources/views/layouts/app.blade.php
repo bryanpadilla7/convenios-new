@@ -49,11 +49,11 @@
 
                     <!-- Agreement -->
                         <li class="text-center pb-1">
-                            <a href="{{ url('/agreements') }}" class="text-center">
-                                <i class="material-icons md-18 mx-auto">business</i>
+                            <a href="{{ url('/instruments') }}" class="text-center">
+                                <i class="material-icons md-18 mx-auto">handshake</i>
                             </a>
-                            <a href="{{ url('/agreements') }}">
-                                <p class="link mx-auto">Convenio</p>
+                            <a href="{{ url('/instruments') }}">
+                                <p class="link mx-auto">Instrumentos</p>
                             </a>
                         </li>
                     <!-- Agreement -->
@@ -89,7 +89,8 @@
                                 <li><a href="{{ url('/municipalities') }}">Municipios</a></li>
                                 <li><a href="{{ url('/tariffs') }}">Tarifario</a></li>
                                 <li><a href="{{ url('/places') }}">Espacios de Servicio</a></li>
-                                <li><a href="{{ url('/types') }}">Tipos de Convenio</a></li>
+                                <li><a href="{{ url('/types') }}">Tipos de Instrumentos</a></li>
+                                <li><a href="{{ url('/sectors') }}">Sectores</a></li>
                                 <li><a href="{{ url('/users') }}">Usuarios</a></li>
                             </ul>
                         </li>

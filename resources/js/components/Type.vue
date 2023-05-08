@@ -19,7 +19,7 @@
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-toolbar-title>Tipos de Convenio</v-toolbar-title>
+            <v-toolbar-title>Tipos de instrumento</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="600px" persistent>
               <template v-slot:activator="{ on, attrs }">
@@ -67,9 +67,9 @@
                     <v-row>
                       <v-col cols="12" sm="12" md="12">
                         <base-input
-                          label="Tipo de convenio"
-                          v-model="$v.editedItem.type_agreement_name.$model"
-                          :validation="$v.editedItem.type_agreement_name"
+                          label="Tipo de instrumento"
+                          v-model="$v.editedItem.type_instrument_name.$model"
+                          :validation="$v.editedItem.type_instrument_name"
                           validationTextType="default"
                           :validationsInput="{
                             required: true,
@@ -158,17 +158,17 @@
       dialog: false,
       dialogDelete: false,
       headers: [
-        { text: "TIPO DE CONVENIO", value: "type_agreement_name" },
+        { text: "TIPO DE INSTRUMENTO", value: "type_instrument_name" },
         { text: "ACCIONES", value: "actions", sortable: false },
       ],
       records: [],
       recordsFiltered: [],
       editedIndex: -1,
       editedItem: {
-        type_agreement_name: "",
+        type_instrument_name: "",
       },
       defaultItem: {
-        type_agreement_name: "",
+        type_instrument_name: "",
       },
       textAlert: "",
       alertEvent: "success",
@@ -180,7 +180,7 @@
     //Validations
     validations: {
       editedItem: {
-        type_agreement_name: {
+        type_instrument_name: {
           required,
           minLength: minLength(1),
           maxLength: maxLength(150),
@@ -352,8 +352,8 @@
         if (this.search != "") {
           this.records.forEach((record) => {
             let searchConcat = "";
-            for (let i = 0; i < record.type_agreement_name.length; i++) {
-              searchConcat += record.type_agreement_name[i].toUpperCase();
+            for (let i = 0; i < record.type_instrument_name.length; i++) {
+              searchConcat += record.type_instrument_name[i].toUpperCase();
               if (
                 searchConcat === this.search.toUpperCase() &&
                 !this.recordsFiltered.some((rec) => rec == record)

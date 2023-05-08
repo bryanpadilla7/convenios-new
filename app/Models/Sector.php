@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class Entity extends Model
+class Sector extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'entities';
+    protected $table = 'sectors';
 
     public $incrementing = true;
 
@@ -18,7 +18,7 @@ class Entity extends Model
 
     protected $fillable = [
         'id',
-        'entity_name',
+        'sector_name',
     ];
 
     public $hidden = [

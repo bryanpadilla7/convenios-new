@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Tariff extends Model
+class UserDependence extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'tariffs';
+    protected $table = 'user_dependences';
 
     public $incrementing = true;
 
@@ -18,8 +18,7 @@ class Tariff extends Model
 
     protected $fillable = [
         'id',
-        'type_charge',
-        'amount',
+        'user_id',
         'dependence_id',
     ];
 
@@ -29,14 +28,14 @@ class Tariff extends Model
         'deleted_at',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
-    public function exonerationDetail()
+    public function user()
     {
-        return $this->hasMany(ExonerationDetail::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function dependences()
+    public function dependence()
     {
         return $this->belongsTo(Dependence::class, 'dependence_id', 'id');
     }

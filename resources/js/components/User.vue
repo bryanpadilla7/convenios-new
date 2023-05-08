@@ -183,10 +183,202 @@
               </v-card-text>
             </v-card>
           </v-dialog>
+
+          <v-dialog v-model="dialogDependence" max-width="900px" persistent>
+              <v-card class="flexcard auth" height="100%">
+                <h1 class="black-secondary text-center mt-4 mb-4">
+                  Agregar dependencia
+                </h1>
+                <v-card-text>
+                  <v-container>
+                    <!-- Form -->
+                    <v-row>
+                      <!-- User Name -->
+                      <v-col cols="12" sm="6" md="4">
+                        <base-input
+                          label="Nombre"
+                          v-model="$v.editedItemD.name.$model"
+                          :validation.sync="$v.editedItemD.name"
+                          validationTextType="default"
+                          :validationsInput="{
+                            required: true,
+                            minLength: true,
+                            maxLength: true,
+                          }"
+                        />
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <base-input
+                          label="Apellidos"
+                          v-model="$v.editedItemD.last_name.$model"
+                          :validation.sync="$v.editedItemD.last_name"
+                          validationTextType="default"
+                          :validationsInput="{
+                            required: true,
+                            minLength: true,
+                            maxLength: true,
+                          }"
+                        />
+                      </v-col>
+                      <!-- Rol  -->
+                      <v-col cols="12" sm="6" md="4">
+                        <base-select
+                          label="Rol"
+                          v-model.trim="$v.editedItemD.rol.$model"
+                          :items="roles"
+                          :validation="$v.editedItemD.rol"
+                        />
+                      </v-col>
+                      <!-- Rol  -->
+                    </v-row>
+                    <!-- Form -->
+                    <br><br>
+                    <v-data-table
+                      :headers="headersDependence"
+                      :items="recordsFiltered2"
+                      sort-by="id"
+                      class="elevation-3 shadow p-3 mt-3"
+                    >
+                      <template v-slot:top>
+                        <v-toolbar flat>
+                          <v-toolbar-title>Dependencias</v-toolbar-title>
+                          <v-spacer></v-spacer>
+                          <v-dialog v-model="dialogAdd" max-width="600px" persistent>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-row>
+                                <v-col align="end">
+                                  <v-btn
+                                    class="mb-2 btn-normal no-uppercase"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    rounded
+                                    @click="$v.editedItemD.$reset()"
+                                  >
+                                    Agregar
+                                  </v-btn>
+                                </v-col>
+                              </v-row>
+                            </template>
+                          
+                            <v-card class="flexcard" height="100%">
+                              <h1 class="black-secondary text-center mt-4 mb-4">
+                                Agregar dependencia
+                              </h1>
+                              <v-card-text>
+                                <v-container>
+                                  <!-- Form -->
+                                  <v-row>
+                                     <!-- Space: National -->
+                                    <v-col cols="12" sm="12" md="6">
+                                      <base-select-search
+                                        label="Dirección Nacional"
+                                        v-model.trim="$v.editedItemD.national_direction_name.$model"
+                                        :items="directions"
+                                        item="national_direction_name"
+                                        :validation="$v.editedItemD.national_direction_name"
+                                        @change="changeDirection()"
+                                      />
+                                    </v-col>
+                                    <!-- Space: National -->
+                                    <!-- Space: Place -->
+                                    <v-col cols="12" sm="12" md="6">
+                                      <base-select-search
+                                        label="Dependencia"
+                                        v-model.trim="$v.editedItemD.dependence_name.$model"
+                                        :items="dependences"
+                                        item="dependence_name"
+                                        :validation="$v.editedItemD.dependence_name"
+                                      />
+                                    </v-col>
+                                    <!-- Space: Place -->
+                                  </v-row>
+                                  <!-- Form -->
+                                  <v-row>
+                                    <v-col align="center">
+                                      <v-btn
+                                        color="btn-normal no-uppercase mt-3"
+                                        rounded
+                                        @click="saveDependence"
+                                      >
+                                        Guardar
+                                      </v-btn>
+                                      <v-btn
+                                        color="btn-normal-close no-uppercase mt-3"
+                                        rounded
+                                        @click="closeAdd"
+                                      >
+                                        Cancelar
+                                      </v-btn>
+                                    </v-col>
+                                  </v-row>
+                                </v-container>
+                              </v-card-text>
+                            </v-card>
+                          </v-dialog>
+                          <v-dialog v-model="dialogDelete" max-width="400px">
+                            <v-card class="h-100">
+                              <v-container>
+                                <h3 class="black-secondary text-center mt-3 mb-3">
+                                  Eliminar registro
+                                </h3>
+                                <v-row>
+                                  <v-col align="center">
+                                    <v-btn
+                                      color="btn-normal no-uppercase mt-3 mb-3 pr-5 pl-5 mx-auto"
+                                      rounded
+                                      @click="deleteItemConfirm"
+                                      >Confirmar</v-btn
+                                    >
+                                    <v-btn
+                                      color="btn-normal-close no-uppercase mt-3 mb-3"
+                                      rounded
+                                      @click="closeDelete"
+                                    >
+                                      Cancelar
+                                    </v-btn>
+                                  </v-col>
+                                </v-row>
+                              </v-container>
+                            </v-card>
+                          </v-dialog>
+                        </v-toolbar>
+                      </template>
+                      <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+                        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                      </template>
+                      <template v-slot:no-data>
+                        <a
+                          href="#"
+                          class="btn btn-normal-secondary no-decoration"
+                          @click="initializeDependence"
+                        >
+                          Reiniciar
+                        </a>
+                      </template>
+                    </v-data-table>
+
+                    <v-row>
+                      <v-col align="center">
+                        <v-btn
+                          color="btn-normal-close no-uppercase mt-3"
+                          rounded
+                          @click="closeDependence"
+                        >
+                          Cancelar
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+        <v-icon small class="mr-2" @click="editItemDependence(item)"> mdi-eye </v-icon>
       </template>
       <template v-slot:no-data>
         <a
@@ -205,6 +397,10 @@
 import roleApi from "../apis/roleApi";
 import userApi from "../apis/userApi";
 import lib from "../libs/function";
+import directionApi from "../apis/directionApi";
+import dependenceApi from "../apis/dependenceApi";
+import userDependenceApi from "../apis/userDependenceApi";
+import axios from "axios";
 
 import {
   required,
@@ -219,14 +415,25 @@ export default {
     return {
       search: "",
       dialog: false,
+      dialogAdd: false,
+      dialogDelete: false,
+      dialogDependence : false,
       headers: [
         { text: "USUARIO", value: "name" },
         { text: "ROL", value: "rol" },
         { text: "CORREO ELECTRÓNICO", value: "email" },
         { text: "ACCIONES", value: "actions", sortable: false },
       ],
+      headersDependence: [
+        { text: "DEPENDENCIAS", value: "dependence_name" },
+        { text: "ACCIONES", value: "actions", sortable: false },
+      ],
       records: [],
       recordsFiltered: [],
+      records2: [],
+      recordsFiltered2: [],
+      directions: [],
+      dependences: [],
       editedIndex: -1,
       skip: 0,
       take: 50,
@@ -250,6 +457,20 @@ export default {
         last_name: "",
         password: "",
         dui: "",
+        rol: "Administrator",
+      },
+      editedItemD: {
+        name: "",
+        national_direction_name: "",
+        dependence_name: "",
+        last_name: "",
+        rol: "Administrator",
+      },
+      defaultItemD: {
+        name: "",
+        national_direction_name: "",
+        dependence_name: "",
+        last_name: "",
         rol: "Administrator",
       },
       textAlert: "",
@@ -295,6 +516,29 @@ export default {
         isValidDui: helpers.regex("isValidDui", /[0-9]{8}-[0-9]/),
       },
     },
+     editedItemD: {
+      name: {
+        required,
+        minLength: minLength(1),
+        maxLength: maxLength(500),
+      },
+      last_name: {
+        required,
+        minLength: minLength(1),
+        maxLength: maxLength(500),
+      },
+      rol: {
+        required,
+      },
+      national_direction_name: {
+        minLength: minLength(1),
+        maxLength: maxLength(150),
+      },
+      dependence_name: {
+        minLength: minLength(1),
+        maxLength: maxLength(150),
+      },
+    },
   },
 
   // Validations
@@ -315,13 +559,27 @@ export default {
     dialog(val) {
       val || this.close();
     },
+
+    dialogAdd(val) {
+      val || this.closeAdd();
+    },
+
+    dialogDependence(val) {
+      val || this.closeDependence();
+    },
+
     dialogBlock(val) {
       val || this.closeBlock();
+    },
+
+    dialogDelete(val) {
+      val || this.closeDelete();
     },
   },
 
   created() {
     this.initialize();
+    this.initializeDependence();
   },
 
   methods: {
@@ -352,10 +610,78 @@ export default {
       this.roles = responses[1].data.roles;
     },
 
+    async initializeDependence() {
+      this.$v.$reset();
+      this.records2 = [];
+      this.recordsFiltered2 = [];
+
+      let requests = [
+        userDependenceApi.get(),
+        directionApi.get(),
+        dependenceApi.get(),
+        userApi.get(),
+      ];
+
+      const responses = await Promise.all(requests).catch((error) => {
+        this.updateAlert(true, "No fue posible eliminar el registros.", "fail");
+        this.redirectSessionFinished = lib.verifySessionFinished(
+          error.response.status,
+          419
+        );
+      });
+
+      this.records2 = responses[0].data.userDependences;
+      this.directions = responses[1].data.directions;
+      this.dependences = responses[2].data.dependences;
+      this.users = responses[3].data.users;
+
+      this.recordsFiltered2 = this.records2;
+    },
+
     editItem(item) {
       this.editedIndex = this.recordsFiltered.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
+    },
+
+    editItemDependence(item) {
+      this.editedIndex = this.recordsFiltered2.indexOf(item);
+      this.editedItemD = Object.assign({}, item);
+      this.dialogDependence = true;
+    },
+
+    deleteItem(item) {
+      this.editedIndex = this.recordsFiltered2.indexOf(item);
+      this.editedItemD = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
+
+    async deleteItemConfirm() {
+      const res = await userDependenceApi
+        .delete(`/${this.editedItemD.id}`)
+        .catch((error) => {
+          this.updateAlert(
+            true,
+            "No fue posible eliminar el registros.",
+            "fail"
+          );
+          this.close();
+          this.redirectSessionFinished = lib.verifySessionFinished(
+            error.response.status,
+            419
+          );
+        });
+
+      if (res.data.status == "success") {
+        this.redirectSessionFinished = lib.verifySessionFinished(
+          res.status,
+          200
+        );
+        this.updateAlert(true, "Registro eliminado.", "success");
+      }
+
+      this.initializeDependence();
+      this.closeDelete();
     },
 
     close() {
@@ -364,6 +690,26 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+    },
+
+    closeDependence() {
+      this.dialogDependence = false;
+      this.$nextTick(() => {
+        this.editedItemD = Object.assign({}, this.defaultItemD);
+        this.editedIndex = -1;
+      });
+    },
+
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItemD = Object.assign({}, this.defaultItemD);
+        this.editedIndex = -1;
+      });
+    },
+
+    closeAdd() {
+      this.dialogAdd = false;
     },
 
     closeBlock() {
@@ -377,10 +723,10 @@ export default {
 
     async save() {
       this.$v.$touch();
-      if (this.$v.$invalid) {
+      /* if (this.$v.$invalid) {
         this.updateAlert(true, "Campos obligatorios.", "fail");
         return;
-      }
+      } */
 
       if (this.editedIndex > -1) {
         const edited = Object.assign(
@@ -437,6 +783,53 @@ export default {
       this.close();
       this.initialize();
       return;
+    },
+
+    async saveDependence() {
+      this.$v.$touch();
+      if (this.editedIndex > -1) {
+        console.log(this.editedItemD);
+        const res = await userDependenceApi
+          .put(`/${this.editedItemD.id}`, this.editedItemD)
+          .catch((error) => {
+            this.updateAlert(
+              true,
+              "No fue posible modificar el registro.",
+              "fail"
+            );
+            this.close();
+            this.redirectSessionFinished = lib.verifySessionFinished(
+              error.response.status,
+              419
+            );
+          });
+
+        if (res.data.status == "success") {
+          this.updateAlert(
+            true,
+            "Registro modificado correctamente.",
+            "success"
+          );
+          window.location.reload();
+        }
+      } else {
+        const res = await userDependenceApi
+          .post(null, this.editedItemD)
+          .catch((error) => {
+            this.updateAlert(true, "No fue posible crear el registro.", "fail");
+            this.close();
+          });
+
+        if (res.data.status == "success") {
+          this.updateAlert(
+            true,
+            "Registro almacenado correctamente.",
+            "success"
+          );
+        }
+      }
+      this.closeAdd();
+      this.initializeDependence();
     },
 
     searchValue() {
@@ -528,6 +921,24 @@ export default {
     showPassword(e) {
       this.typePassword = e.show;
     },
+
+    async changeDirection() {
+      let { data } = await axios
+        .get(
+          "api/dependence/byDirectionName/" +
+          this.editedItemD.national_direction_name
+        )
+        .catch((error) => {
+          this.$emit("update-alert", {
+            show: true,
+            message:
+              "No fue posible obtener la información de las dependencias. ",
+            type: "fail",
+          });
+        });
+      this.dependences = data.dependences;
+    },
+
   },
 };
 </script>
