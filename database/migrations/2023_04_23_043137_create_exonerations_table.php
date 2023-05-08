@@ -17,12 +17,20 @@ return new class extends Migration
             $table->id();
             $table->string('exonerated_description');
             $table->foreignId('instrument_id')->constrained('instruments')->nullable();
+<<<<<<< HEAD
             $table->integer('hour')->nullable();
+=======
+            $table->string('hour')->nullable();
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
             $table->integer('people')->nullable();
             $table->date('date')->nullable();
             $table->decimal('amount_hour', 8, 2)->nullable();
             $table->decimal('amount_people', 8, 2)->nullable();
+<<<<<<< HEAD
             $table->string('service_place')->nullable();
+=======
+            $table->foreignId('service_place_id')->constrained('service_places')->nullable();
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
             $table->foreignId('tariff_id')->constrained('tariffs')->nullable();
             $table->decimal('tariff_people', 8, 2)->nullable();
             $table->decimal('tariff_hour', 8, 2)->nullable();

@@ -111,10 +111,13 @@ Route::group(['middleware'=> ['auth', 'verified']], function () {
             return view('sector.index');
         });
 
+<<<<<<< HEAD
         Route::get('/userDependences', function () {
             return view('userDependence.index');
         });
 
+=======
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
         //Reports
         Route::get('generate-pdf', [PDFController::class, 'generatePDF']);
         Route::get('pdf/reports', [PDFController::class, 'generatePDF']);

@@ -11,6 +11,7 @@
       @show-alert="updateAlert($event)"
       class="mb-2"
     />
+<<<<<<< HEAD
   <v-data-table
         :headers="headers"
         :items="recordsFiltered"
@@ -59,6 +60,338 @@
                     <h5>Información del instrumento</h5>
                     <hr/>
                     <v-row>
+=======
+    <v-data-table
+      :headers="headers"
+      :items="recordsFiltered"
+      sort-by="name"
+      class="elevation-3 shadow p-3 mt-3"
+    >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>Instrumentos</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-dialog v-model="dialog" max-width="1000px" persistent>
+            <template v-slot:activator="{}">
+              <v-row>
+                <v-col align="end">
+                  <v-btn class="mb-2 btn-normal" @click="OpenAgreement" rounded>
+                    Agregar
+                  </v-btn>
+                </v-col>
+                <v-col
+                  xs="6"
+                  sm="6"
+                  md="6"
+                  class="d-none d-md-block d-lg-block"
+                >
+                  <v-text-field
+                    dense
+                    label="Buscar"
+                    outlined
+                    type="text"
+                    class=""
+                    v-model="search"
+                    @keyup="searchValue()"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </template>
+            <v-card class="flexcard" height="100%">
+              <v-card-title>
+                <h1 class="mx-auto pt-3 mb-3 text-center black-secondary">
+                  {{ formTitle }}
+                </h1>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container>
+                  <h5>Información del instrumento</h5>
+                  <hr/>
+                  <v-row>
+                    <!-- Instrument type -->
+                      <v-col cols="12" sm="12" md="6">
+                        <base-select-search
+                          label="Tipo de instrumento"
+                          v-model.trim="$v.editedItem.type_instrument_name.$model"
+                          :items="types"
+                          item="type_instrument_name"
+                          :validation="$v.editedItem.type_instrument_name"
+                        />
+                      </v-col>
+                    <!-- Instrument type -->
+                    <!-- Instrument Name -->
+                    <v-col cols="12" sm="12" md="6">
+                      <base-input
+                        label="Nombre"
+                        v-model="$v.editedItem.instrument_name.$model"
+                        :validation="$v.editedItem.instrument_name"
+                        validationTextType="default"
+                      />
+                    </v-col>
+                    <!-- Instrument Name -->
+                  </v-row>
+                  <v-row>
+                    <!-- Instrument:Entity -->
+                    <v-col cols="12" sm="12" md="6">
+                      <base-input
+                        label="Entidad"
+                        v-model.trim="$v.editedItem.entity.$model"
+                        :validation="$v.editedItem.entity"
+                      />
+                    </v-col>
+                    <!-- Instrument:Entity -->
+                    <!-- Instrument:Sector -->
+                      <v-col cols="12" sm="12" md="6">
+                        <base-select-search
+                          label="Sector"
+                          v-model.trim="$v.editedItem.sector_name.$model"
+                          :items="sectors"
+                          item="sector_name"
+                          :validation="$v.editedItem.sector_name"
+                        />
+                      </v-col>
+                      <!-- Instrument:Sector -->
+                  </v-row>
+                  <v-row>
+                    <!-- Instrument description -->
+                    <v-col cols="12" sm="12" md="12">
+                      <v-textarea
+                        label="Descripción del instrumento"
+                        v-model="$v.editedItem.description.$model"
+                        :validation="$v.editedItem.description"
+                        auto-grow
+                        outlined
+                        rows="1"
+                        row-height="15"
+                        dense
+                      ></v-textarea>
+                    </v-col>
+                    <!-- Instrument description -->
+                  </v-row>
+                  <v-row v-if="showExoneration">
+                    <v-col align="start">
+                      <v-btn
+                        color="btn btn-normal mb-3 mt-3"
+                        rounded
+                        @click="openExonerationModal()"
+                      >
+                        Agregar detalle
+                      </v-btn>
+                      <v-btn
+                        v-if="showSaveButton()"
+                        color="btn-normal no-uppercase "
+                        rounded
+                        @click="saveExoneration()"
+                      >
+                        Guardar exoneraciones
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                  <!-- Form -->
+                  <v-row v-if="showExoneration">
+                    <v-col cols="12" lg="12" md="12" xs="12">
+                      <div class="table-responsive-md">
+                        <table class="table table-responsive-md table-hover">
+                          <thead>
+                            <th>Especio/Elenco</th>
+                            <th>Fecha</th>
+                            <th>Tarifa ($)</th>
+                            <th>Horas</th>
+                            <th>Monto ($)</th>
+                            <th>Número de personas</th>
+                            <th>Tarifa por persona ($)</th>
+                            <th>Monto exonerado ($)</th> 
+                            <th class="text-center">Acciones</th>
+                          </thead>
+                          <tbody>
+                            <tr
+                              v-for="(exoneration, index) in editedItem.exonerations" :key="index"
+                            >
+                              <td>
+                                <p> {{ exoneration.place_name }}</p>
+                              </td>
+                              <td>
+                                <p>{{ exoneration.date }}</p>
+                              </td>
+                              <td>
+                                  <p>{{ exoneration.tariff_hour }}</p>
+                              </td>
+                              <td>
+                                <p>{{ exoneration.hour }}</p>
+                              </td>
+                              <td>
+                                  <p>{{ exoneration.amount_hour }}</p>
+                              </td>
+                              <td>
+                                <p>{{ exoneration.people }}</p>
+                              </td>
+                              <td>
+                                  <p>{{ exoneration.tariff_people }}</p>
+                              </td>
+                              <td>
+                                <p>{{ exoneration.amount_people }}</p>
+                              </td>
+                              <td class="text-center">
+                                <a
+                                  @click="editItemExoneration(exoneration)"
+                                  class="p-1 mr-1 text-center"
+                                  ><span class="material-icons text-blue">
+                                    edit
+                                  </span></a
+                                >
+                              </td>
+                              <td class="text-center">
+                                <a
+                                  @click="deleteItem(exoneration.id)"
+                                  class="p-1 mr-1 text-center"
+                                  ><span class="material-icons text-blue">
+                                    delete
+                                  </span></a
+                                >
+                              </td>
+                            </tr>
+                            <tr v-if="noData()">
+                              <td colspan="7" class="text-center">
+                                <p>Aun no se registró ninguna exoneración.</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col align="center">
+                      <v-btn
+                        color="btn-normal no-uppercase mt-3"
+                        rounded
+                        @click="save()"
+                      >
+                        Guardar
+                      </v-btn>
+                      <v-btn
+                        color="btn-normal-close no-uppercase mt-3"
+                        rounded
+                        @click="close"
+                      >
+                        Cancelar
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="dialogDelete" max-width="400px">
+            <v-card class="h-100">
+              <v-container>
+                <h3 class="black-secondary text-center mt-3 mb-3">
+                  Eliminar registro
+                </h3>
+                <v-row>
+                  <v-col align="center">
+                    <v-btn
+                      color="btn-normal no-uppercase mt-3 mb-3 pr-5 pl-5 mx-auto"
+                      rounded
+                      @click="deleteItemOfTable()"
+                      >Confirmar</v-btn
+                    >
+                    <v-btn
+                      color="btn-normal-close no-uppercase mt-3 mb-3"
+                      rounded
+                      @click="closeDelete"
+                    >
+                      Cancelar
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </template>
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-icon
+          small
+          class="mr-2"
+          @click="editItem(item)"
+          title="Agregar exoneraciones y editar convenios"
+        >
+          mdi-pencil
+        </v-icon>
+      </template>
+      <template v-slot:no-data>
+        <a
+          href="#"
+          class="btn btn-normal-secondary no-decoration"
+          @click="initialize"
+        >
+          Reiniciar
+        </a>
+      </template>
+    </v-data-table>
+    <template>
+        <v-dialog v-model="dialogAddPlace" max-width="700px" persistent>
+          <v-card class="black-secondary text-center">
+            <h1 class="black-secondary text-center mt-4 mb-4">
+              Agregar Espacio de Servicio
+            </h1>
+            <v-card-text>
+              <v-container>
+                <!-- Form -->
+                <v-row>
+                      <v-col cols="12" sm="12" md="12">
+                        <base-input
+                          label="Nombre"
+                          v-model="$v.add.place_name.$model"
+                          :validation="$v.add.place_name"
+                          validationTextType="default"
+                          :validationsInput="{
+                            required: true,
+                            minLength: true,
+                            maxLength: true,
+                          }"
+                        />
+                      </v-col>
+                    </v-row>
+                    <!-- Form -->
+                    <v-row>
+                      <v-col align="center">
+                        <v-btn
+                          color="btn-normal no-uppercase mt-3"
+                          rounded
+                          @click="saveAddPlace"
+                        >
+                          Guardar
+                        </v-btn>
+  
+                        <v-btn
+                          color="btn-normal-close no-uppercase mt-3"
+                          rounded
+                          @click="closeAddPlace"
+                        >
+                          Cancelar
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+              </v-container>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+    </template>
+    <!--form diasabled-->
+    <template>
+      <v-dialog v-model="viewExonerations" max-width="1400px" persistent>
+        <v-card class="flexcard" height="100%">
+          <h1 class="black-secondary text-center mt-4 mb-4">Exoneraciones</h1>
+          <v-card-text>
+            <v-container>
+              <h5>Información del instrumento</h5>
+              <hr/>
+              <v-form disabled>
+                <v-row>
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
                       <!-- Instrument type -->
                         <v-col cols="12" sm="12" md="6">
                           <base-select-search
@@ -84,6 +417,7 @@
                     <v-row>
                       <!-- Instrument:Entity -->
                       <v-col cols="12" sm="12" md="6">
+<<<<<<< HEAD
                         <base-select-search
                             label="Entidad"
                             v-model.trim="$v.editedItem.entity_name.$model"
@@ -91,6 +425,13 @@
                             item="entity_name"
                             :validation="$v.editedItem.entity_name"
                           />
+=======
+                        <base-input
+                          label="Entidad"
+                          v-model.trim="$v.editedItem.entity.$model"
+                          :validation="$v.editedItem.entity"
+                        />
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
                       </v-col>
                       <!-- Instrument:Entity -->
                       <!-- Instrument:Sector -->
@@ -98,7 +439,11 @@
                           <base-select-search
                             label="Sector"
                             v-model.trim="$v.editedItem.sector_name.$model"
+<<<<<<< HEAD
                             :items="sectors"
+=======
+                            :items="entities"
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
                             item="sector_name"
                             :validation="$v.editedItem.sector_name"
                           />
@@ -121,6 +466,7 @@
                       </v-col>
                       <!-- Instrument description -->
                     </v-row>
+<<<<<<< HEAD
                     <v-row v-if="showExoneration">
                       <v-col align="start">
                         <v-btn
@@ -346,6 +692,78 @@
           </a>
         </template>
       </v-data-table>
+=======
+              </v-form>
+            </v-container>
+            <v-row>
+              <v-col cols="12" lg="12" md="12" xs="12">
+                <!-- Academic Level -->
+                <div class="table-responsive-md">
+                  <table class="table table-responsive-md table-hover">
+                    <thead>
+                      <th>Especio/Elenco</th>
+                      <th>Fechas</th>
+                      <th>Tarifa ($)</th>
+                      <th>Horas</th>
+                      <th>Monto ($)</th>
+                      <th>Número de personas</th>
+                      <th>Tarifa por persona ($)</th>
+                      <th>Monto exonerado ($)</th>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="(exoneration, index) in editedItem.exonerations"
+                        :key="index"
+                      >
+                        <td>
+                          <p>
+                            {{ exoneration.place_name }}
+                          </p>
+                        </td>
+                        <td>
+                          <p>{{ exoneration.date }}</p>
+                        </td>
+                        <td>
+                            <p>{{ exoneration.tariff_hour }}</p>
+                        </td>
+                        <td>
+                          <p>{{ exoneration.hour }}</p>
+                        </td>
+                        <td>
+                            <p>{{ exoneration.amount_hour }}</p>
+                        </td>
+                        <td>
+                          <p>{{ exoneration.people }}</p>
+                        </td>
+                        <td>
+                            <p>{{ exoneration.tariff_people }}</p>
+                        </td>
+                        <td>
+                          <p>{{ exoneration.amount_people }}</p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col align="center">
+                <v-btn
+                  color="btn-normal-close no-uppercase mt-3 mb-3"
+                  rounded
+                  @click="closeViewExonerations"
+                >
+                  Cerrar
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </template>
+    <!--form diasabled-->
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     <!--form detail-->
     <template>
       <v-dialog v-model="dialogExoneration" max-width="1400px" persistent>
@@ -375,7 +793,11 @@
                     label="Valor"
                     v-model.trim="$v.editedItem.worth.$model"
                     :validation="$v.editedItem.worth"
+<<<<<<< HEAD
                     type="number"
+=======
+                    validationTextType="default"
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
                   />
                 </v-col>
                 <!-- Value != agreement -->
@@ -385,7 +807,11 @@
                     label="Monto"
                     v-model.trim="$v.editedItem.concept_amount.$model"
                     :validation="$v.editedItem.concept_amount"
+<<<<<<< HEAD
                     type="number"
+=======
+                    validationTextType="none"
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
                   />
                 </v-col>
                 <!-- Amount != agreement -->
@@ -461,6 +887,7 @@
                 </v-col>
                 <!-- Space: Place -->
               </v-row>
+<<<<<<< HEAD
               <v-container v-if="editedItem.type_instrument_name == 'Convenio'">
                 <br /><br />
                 <h5>Información de la exoneración</h5>
@@ -473,6 +900,26 @@
                     label="Monto no tarifado"
                     >
               </v-checkbox>
+=======
+              <v-contrainer v-if="editedItem.type_instrument_name == 'Convenio'">
+                <br /><br />
+                <h5>Información de la exoneración</h5>
+                <hr/>
+              </v-contrainer>
+              <v-row v-if="editedItem.type_instrument_name == 'Convenio'">
+                <v-col align="end">
+                  <v-btn
+                    class="mb-2 btn-normal no-uppercase"
+                    rounded
+                    small
+                    @click="OpenNewPlace()"
+                  >
+                    AGREGAR ELENCOS
+                    <v-icon right> mdi-plus-circle </v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
               <v-row v-if="editedItem.type_instrument_name == 'Convenio'">
                 <!-- Exoneracion: date -->
                 <v-col cols="12" sm="12" md="6">
@@ -486,12 +933,22 @@
                 </v-col>
                 <!-- Space: Place -->
                 <v-col cols="12" sm="12" md="6">
+<<<<<<< HEAD
                   <base-input
                       label="Espacio de servicio"
                       v-model.trim="$v.editedItem.service_place.$model"
                       :validation="$v.editedItem.service_place"
                       validationTextType="default"
                     />
+=======
+                  <base-select-search
+                    label="Espacio/Elenco de Servicio"
+                    v-model.trim="$v.editedItem.place_name.$model"
+                    :items="places"
+                    item="place_name"
+                    :validation="$v.editedItem.place_name"
+                  />
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
                 </v-col>
                   <!-- not Tariff Dependence-->
                   <v-col cols="12" xs="12" sm="12" md="4" v-show="hidden">
@@ -588,6 +1045,16 @@
                   ></v-textarea>
                 </v-col>
               </v-row>
+<<<<<<< HEAD
+=======
+                <v-checkbox
+                  v-if="editedItem.type_instrument_name == 'Convenio'"
+                  class="mb-3"
+                  @click="hidden = !hidden"
+                  label="Monto no tarifado"
+                  >
+                </v-checkbox>
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
               <v-row v-if="editedItem.type_instrument_name == 'Convenio'">
                 <v-col align="center">
                   <v-btn
@@ -609,6 +1076,7 @@
         </v-card>
       </v-dialog>
     </template>
+<<<<<<< HEAD
 
     <template>
               <v-dialog v-model="dialogDependence" max-width="900px" persistent>
@@ -772,6 +1240,8 @@
                   </v-card>
                 </v-dialog>
     </template>
+=======
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     <!--form detail-->
   </div>
 </template>
@@ -783,10 +1253,17 @@ import roleApi from "../apis/roleApi";
 import typeApi from "../apis/typeApi";
 import directionApi from "../apis/directionApi";
 import dependenceApi from "../apis/dependenceApi";
+<<<<<<< HEAD
 import sectorApi from "../apis/sectorApi";
 import tariffApi from "../apis/tariffApi";
 import exonerationApi from "../apis/exonerationApi";
 import instrumentDependenceApi from "../apis/instrumentDependenceApi";
+=======
+import placeApi from "../apis/placeApi";
+import sectorApi from "../apis/sectorApi";
+import tariffApi from "../apis/tariffApi";
+import exonerationApi from "../apis/exonerationApi";
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
 import lib from "../libs/function";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 import axios from "axios";
@@ -794,26 +1271,42 @@ import BaseInput from "./base-components/BaseInput.vue";
 import { title } from "process";
 
 export default {
+<<<<<<< HEAD
   components: { BaseInput},
   data: () => ({
     search: "",
     dialog: false,
     dialogAdd: false,
     dialogDependence : false,
+=======
+  components: { BaseInput },
+  data: () => ({
+    search: "",
+    dialog: false,
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     showExoneration: false,
     dialogExoneration: false,
     viewExonerations: false,
     hidden: false,
     showModal: false,
     dialogDelete: false,
+<<<<<<< HEAD
     headers: [
       { text: "INSTRUMENTO", value: "instrument_name" },
       { text: "TIPO DE INSTRUMENTO", value: "type_instrument_name" },
       { text: "ENTIDAD", value: "entity_name" },
+=======
+    dialogAddPlace: false,
+    headers: [
+      { text: "INSTRUMENTO", value: "instrument_name" },
+      { text: "TIPO DE INSTRUMENTO", value: "type_instrument_name" },
+      { text: "ENTIDAD", value: "entity" },
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
       { text: "SECTOR", value: "sector_name" },
       { text: "DESCRIPCIÓN", value: "description" },
       { text: "ACCIONES", value: "actions", sortable: false },
     ],
+<<<<<<< HEAD
     headersDependence: [
         { text: "DEPENDENCIAS", value: "dependence_name" },
         { text: "ACCIONES", value: "actions", sortable: false },
@@ -823,16 +1316,31 @@ export default {
     records2: [],
       recordsFiltered2: [],
     editedIndex: -1,
+=======
+    records: [],
+    recordsFiltered: [],
+    editedIndex: -1,
+    add: {
+      place_name: "",
+    },
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     editedItem: {
       instrument_name: "",
       description: "",
       type_instrument_name: "",
+<<<<<<< HEAD
       entity_name: "",
       national_direction_name: "",
       dependence_name: "",
       national_direction_name_instrument: "",
       dependence_name_instrument: "",
       service_place: "",
+=======
+      entity: "",
+      national_direction_name: "",
+      dependence_name: "",
+      place_name: "",
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
       amount_hour: "",
       amount_people: "",
       exonerated_description: "",
@@ -852,12 +1360,19 @@ export default {
       instrument_name: "",
       description: "",
       type_instrument_name: "",
+<<<<<<< HEAD
       entity_name: "",
       national_direction_name: "",
       dependence_name: "",
       national_direction_name_instrument: "",
       dependence_name_instrument: "",
       service_place: "",
+=======
+      entity: "",
+      national_direction_name: "",
+      dependence_name: "",
+      place_name: "",
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
       amount_hour: "",
       amount_people: "",
       exonerated_description: "",
@@ -873,6 +1388,7 @@ export default {
       worth: "",
       concept_amount: "",
     },
+<<<<<<< HEAD
     editedItemD: {
         instrument_name: "",
         national_direction_name: "",
@@ -883,6 +1399,8 @@ export default {
         national_direction_name: "",
         dependence_name: "",
       },
+=======
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     textAlert: "",
     alertEvent: "success",
     showAlert: false,
@@ -900,6 +1418,15 @@ export default {
 
   //Validations
   validations: {
+<<<<<<< HEAD
+=======
+    add: {
+      place_name: {
+        minLength: minLength(1),
+        maxLength: maxLength(150),
+      },
+    },
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     editedItem: {
         instrument_name: {
         required,
@@ -913,7 +1440,11 @@ export default {
         minLength: minLength(1),
         maxLength: maxLength(150),
       },
+<<<<<<< HEAD
       entity_name: {
+=======
+      entity: {
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
         required,
       },
       sector_name: {
@@ -927,6 +1458,7 @@ export default {
         minLength: minLength(1),
         maxLength: maxLength(150),
       },
+<<<<<<< HEAD
       national_direction_name_instrument: {
         minLength: minLength(1),
         maxLength: maxLength(150),
@@ -936,6 +1468,9 @@ export default {
         maxLength: maxLength(150),
       },
       service_place: {
+=======
+      place_name: {
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
         minLength: minLength(1),
         maxLength: maxLength(150),
       },
@@ -987,6 +1522,7 @@ export default {
         minLength: minLength(1),
       },
     },
+<<<<<<< HEAD
     editedItemD: {
       instrument_name: {
         required,
@@ -1002,6 +1538,8 @@ export default {
         maxLength: maxLength(150),
       },
     },
+=======
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
   },
 
   //Validations
@@ -1027,17 +1565,24 @@ export default {
     viewExonerations(val) {
       val || this.closeExoneration();
     },
+<<<<<<< HEAD
     dialogAdd(val) {
       val || this.closeAdd();
     },
     dialogDependence(val) {
       val || this.closeDependence();
     },
+=======
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
   },
 
   created() {
     this.initialize();
+<<<<<<< HEAD
     this.initializeDependence();
+=======
+    
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
   },
 
   methods: {
@@ -1048,8 +1593,13 @@ export default {
       let requests = [
         instrumentApi.get(),
         typeApi.get(),
+<<<<<<< HEAD
         entityApi.get(),
         directionApi.get(),
+=======
+        directionApi.get(),
+        placeApi.get(),
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
         dependenceApi.get(),
         tariffApi.get(),
         sectorApi.get(),
@@ -1065,8 +1615,13 @@ export default {
 
       this.records = responses[0].data.instruments;
       this.types = responses[1].data.types;
+<<<<<<< HEAD
       this.entities = responses[2].data.entities;
       this.directions = responses[3].data.directions;
+=======
+      this.directions = responses[2].data.directions;
+      this.places = responses[3].data.places;
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
       this.dependences = responses[4].data.dependences;
       this.tariffs = responses[5].data.tariffs;
       this.sectors = responses[6].data.sectors;
@@ -1075,6 +1630,7 @@ export default {
       this.recordsFiltered = this.records;
     },
 
+<<<<<<< HEAD
     async initializeDependence() {
       this.$v.$reset();
       this.records2 = [];
@@ -1101,6 +1657,41 @@ export default {
       this.instruments = responses[3].data.instruments;
 
       this.recordsFiltered2 = this.records2;
+=======
+    OpenNewPlace() {
+      this.dialogAddPlace = true;
+      this.editedItem.place_name = "";
+    },
+
+    async saveAddPlace(){
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.updateAlert(true, "Campos obligatorios.", "fail");
+        return;
+      }
+
+      const res = await placeApi
+        .post(null, this.add)
+        .catch((error) => {
+          this.updateAlert(true, "No fue posible crear el registro.", "fail");
+          this.closeAddPlace();
+        });
+
+      if (res.data.status == "success") {
+        this.updateAlert(true, "Registro almacenado correctamente.", "success");
+      }
+
+      this.closeAddPlace();
+      this.initialize();
+    },
+
+    closeAddPlace(){
+      this.dialogAddPlace = false;
+      this.$nextTick(() => {
+        this.editedItem.place_name = Object.assign({}, this.defaultItem.place_name);
+        this.editedIndex = -1;
+      });
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     },
 
     async calculateExoneratedAmount() {
@@ -1111,11 +1702,17 @@ export default {
       this.dialog = true;
       this.showExoneration = false;
       this.editedItem.instrument_name = "";
+<<<<<<< HEAD
       this.editedItem.entity_name = "";
       this.editedItem.sector_name = "";
       this.editedItem.type_instrument_name = "";
       this.editedItem.national_direction_name_instrument = "";
       this.editedItem.dependence_name_instrument = "";
+=======
+      this.editedItem.entity = "";
+      this.editedItem.sector_name = "";
+      this.editedItem.type_instrument_name = "";
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
       this.editedItem.description = "";
     },
 
@@ -1172,21 +1769,31 @@ export default {
       this.editedIndex = this.recordsFiltered.indexOf(item);
       this.editedItem = Object.assign({}, item);
 
+<<<<<<< HEAD
       this.$v.editedItem.type_instrument_name.$model = this.editedItem.type_instrument_name;
       this.$v.editedItem.entity_name.$model = this.editedItem.entity_name;
       this.$v.editedItem.sector_name.$model = this.editedItem.sector_name;
       this.$v.editedItem.national_direction_name_instrument.$model = this.editedItem.national_direction_name_instrument;
       this.$v.editedItem.dependence_name_instrument.$model = this.editedItem.dependence_name_instrument;
+=======
+      this.$v.editedItem.type_instrument_name.$model =
+        this.editedItem.type_instrument_name;
+      this.$v.editedItem.entity.$model = this.editedItem.entity;
+      this.$v.editedItem.sector_name.$model = this.editedItem.sector_name;
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
 
       this.clearFields();
     },
 
+<<<<<<< HEAD
     editItemDependence(item) {
       this.editedIndex = this.recordsFiltered2.indexOf(item);
       this.editedItemD = Object.assign({}, item);
       this.dialogDependence = true;
     },
 
+=======
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     close() {
       this.dialog = false;
       this.$nextTick(() => {
@@ -1198,6 +1805,7 @@ export default {
       }
     },
 
+<<<<<<< HEAD
     closeDependence() {
       this.dialogDependence = false;
       this.$nextTick(() => {
@@ -1245,16 +1853,25 @@ export default {
     },
 
 
+=======
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     viewExonerationItem(item) {
       this.viewExonerations = true;
       this.editedIndex = this.recordsFiltered.indexOf(item);
       this.editedItem = Object.assign({}, item);
 
+<<<<<<< HEAD
       this.$v.editedItem.type_instrument_name.$model = this.editedItem.type_instrument_name;
       this.$v.editedItem.entity_name.$model = this.editedItem.entity_name;
       this.$v.editedItem.sector_name.$model = this.editedItem.sector_name;
       this.$v.editedItem.national_direction_name_instrument.$model = this.editedItem.national_direction_name_instrument;
       this.$v.editedItem.dependence_name_instrument.$model = this.editedItem.dependence_name_instrument;
+=======
+      this.$v.editedItem.type_instrument_name.$model =
+        this.editedItem.type_instrument_name;
+      this.$v.editedItem.entity.$model = this.editedItem.entity;
+      this.$v.editedItem.sector_name.$model = this.editedItem.sector_name;
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     },
 
     closeViewExonerations() {
@@ -1274,15 +1891,24 @@ export default {
 
       this.editedItem.national_direction_name = "";
       this.editedItem.dependence_name = "";
+<<<<<<< HEAD
       this.editedItem.service_place = "";
+=======
+      this.editedItem.place_name = "";
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
       this.editedItem.tariff_hour = "";
       this.editedItem.not_charged_hour = "";
       this.editedItem.tariff_people = "";
       this.editedItem.not_charged_people = "";
       this.editedItem.people = "";
       this.editedItem.date = "";
+<<<<<<< HEAD
       this.editedItem.amount_hour = 0;
       this.editedItem.amount_people = 0;
+=======
+      this.editedItem.amount_hour = "";
+      this.editedItem.amount_people = "";
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
       this.editedItem.hour = "";
       this.editedItem.exonerated_description = "";
       this.editedItem.concept = "",
@@ -1306,6 +1932,7 @@ export default {
 
     async addNewExoneration() {
       this.$v.$touch();
+<<<<<<< HEAD
       /* if (this.$v.$invalid) {
         this.updateAlert(true, "Campos obligatorios.", "fail");
         return;
@@ -1316,6 +1943,12 @@ export default {
 
       const selectedTariffPeople = this.tariffs.find(tariff => tariff.type_charge === this.editedItem.tariff_people)
       const tariffAmountPeople = selectedTariffPeople ? selectedTariffPeople.amount : 0
+=======
+      if (this.$v.$invalid) {
+        this.updateAlert(true, "Campos obligatorios.", "fail");
+        return;
+      }
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
 
       const newExoneration = {
         exonerated_description: this.editedItem.exonerated_description,
@@ -1323,13 +1956,22 @@ export default {
         hour: this.editedItem.hour,
         people: this.editedItem.people,
         date: this.editedItem.date,
+<<<<<<< HEAD
         service_place: this.editedItem.service_place,
+=======
+        place_name: this.editedItem.place_name,
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
         tariff_hour: this.editedItem.tariff_hour,
         not_charged_hour: this.editedItem.not_charged_hour,
         tariff_people: this.editedItem.tariff_people,
         not_charged_people: this.editedItem.not_charged_people,
+<<<<<<< HEAD
         amount_hour: this.editedItem.hour * (this.editedItem.not_charged_hour || tariffAmountHour),
         amount_people: this.editedItem.people * (this.editedItem.not_charged_people || tariffAmountPeople),
+=======
+        amount_hour: this.editedItem.amount_hour,
+        amount_people: this.editedItem.amount_people,
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
         concept: this.editedItem.concept,
         worth: this.editedItem.worth,
         concept_amount: this.editedItem.concept_amount,
@@ -1343,10 +1985,17 @@ export default {
 
     async saveExoneration() {
       this.$v.$touch();
+<<<<<<< HEAD
       /* if (this.$v.$invalid) {
         this.updateAlert(true, "Campos obligatorios.", "fail");
         return;
       } */
+=======
+      if (this.$v.$invalid) {
+        this.updateAlert(true, "Campos obligatorios.", "fail");
+        return;
+      }
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
 
       const res = await exonerationApi
         .post(null, this.editedItem)
@@ -1363,6 +2012,7 @@ export default {
       window.location.reload();
     },
 
+<<<<<<< HEAD
     async saveDependence() {
       this.$v.$touch();
       if (this.editedIndex > -1) {
@@ -1410,6 +2060,8 @@ export default {
       this.initializeDependence();
     },
 
+=======
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     editItemExoneration() {
       this.dialogExoneration = true;
       this.deleteItemOfTable();
@@ -1493,6 +2145,7 @@ export default {
     updateTimeOut(event) {
       this.redirectSessionFinished = event;
     },
+<<<<<<< HEAD
 
     async changeDirectionI() {
       let { data } = await axios
@@ -1510,6 +2163,8 @@ export default {
         });
       this.dependences = data.dependences;
     },
+=======
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
   },
 };
 </script>

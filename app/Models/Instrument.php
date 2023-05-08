@@ -22,7 +22,11 @@ class Instrument extends Model
         'description',
         'type_instrument_id',
         'sector_id',
+<<<<<<< HEAD
         'entity_id',
+=======
+        'entity',
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     ];
 
     public $hidden = [
@@ -34,6 +38,7 @@ class Instrument extends Model
     public $timestamps = true;
 
     public function sector()
+<<<<<<< HEAD
     {
         return $this->belongsTo(Sector::class, 'sector_id', 'id');
     }
@@ -44,10 +49,20 @@ class Instrument extends Model
     }
 
     public function entity()
+=======
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     {
-        return $this->belongsTo(Entity::class, 'entity_id', 'id');
+        return $this->belongsTo(Sector::class, 'sector_id', 'id');
     }
 
+<<<<<<< HEAD
+=======
+    public function typeInstrument()
+    {
+        return $this->belongsTo(TypeInstrument::class, 'type_instrument_id', 'id');
+    }
+
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
     public function exonerations()
     {
         return $this->hasMany(Exoneration::class);

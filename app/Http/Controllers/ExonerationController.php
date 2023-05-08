@@ -24,13 +24,24 @@ class ExonerationController extends Controller
     }
 
     public function store(Request $request)
+<<<<<<< HEAD
     {   //dd($request);
         $instrument_id = Instrument::where("instrument_name", $request->instrument_name)->first()->id;
+=======
+    {   //dd($request->exonerations);
+        $instrument_id = Instrument::where("instrument_name", $request->instrument_name)->first()->id;
+        $dependence_id = Dependence::where("dependence_name", $request->dependence_name)->first()->id;
+        $place_id = ServicePlace::where("place_name", $request->place_name)->first()->id;
+        $tariff_id = Tariff::where("type_charge", $request->tariff_hour)->first()->id;
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
         
         $exonerations = $request->exonerations;
 
         foreach ($exonerations as $exoneration) {
+<<<<<<< HEAD
             $tariff_id = "1";
+=======
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
             $tariff_hour = null;
             $tariff_people = null;
             $not_charged_hour = null;
@@ -39,7 +50,10 @@ class ExonerationController extends Controller
             if ($exoneration["tariff_hour"] != null && $exoneration["tariff_hour"] != "" && $exoneration["tariff_people"] != null && $exoneration["tariff_people"] != "") {
                 $tariff_hour = Tariff::where("type_charge", $exoneration["tariff_hour"])->first()->id;
                 $tariff_people = Tariff::where("type_charge", $exoneration["tariff_people"])->first()->id;
+<<<<<<< HEAD
                 $tariff_id = Tariff::where("type_charge", $request->tariff_hour)->first()->id;
+=======
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
             } else {
                 $not_charged_hour = $exoneration["not_charged_hour"];
                 $not_charged_people = $exoneration["not_charged_people"];
@@ -48,13 +62,21 @@ class ExonerationController extends Controller
             Exoneration::create([
                 'exonerated_description' => $exoneration["exonerated_description"],
                 'instrument_id' => $instrument_id,
+<<<<<<< HEAD
+=======
+                'dependence_id' => $dependence_id,
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
                 'tariff_id' => $tariff_id,
                 'hour'=> $exoneration["hour"],
                 'people'=> $exoneration["people"],
                 'date'=> $exoneration["date"],
                 'amount_hour' => $exoneration["amount_hour"],
                 'amount_people' => $exoneration["amount_people"],
+<<<<<<< HEAD
                 'service_place' => $exoneration["service_place"],
+=======
+                'service_place_id' => $place_id,
+>>>>>>> 2b413b2241e5bf3c815a10b67fee54829e5ed014
                 'tariff_hour' => $tariff_hour,
                 'tariff_people' => $tariff_people,
                 'not_charged_hour' => $not_charged_hour,
